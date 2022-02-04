@@ -3,39 +3,29 @@ const path = require('path')
 const { ApolloServer } = require('apollo-server')
 const { PrismaClient } = require('@prisma/client')
 
+const Query = require('./resolvers/Query')
+const Mutation = require('./resolvers/Mutation')
+const Link = require('./resolvers/Link')
+const User = require('./resolvers/User')
+const { getUserId } = require('./utils')
+
 const prisma = new PrismaClient()
 
 const resolvers = {
-  Query: {
-    info: () => `This is the API of a Hackernews Clone`,
-    feed: async (_, __, context) => context.prisma.link.findMany(),
-  },
-
-  Mutation: {
-    post: async (parent, args, context) => {
-      const newLink = context.prisma.link.create({
-        data: {
-          url: args.url,
-          description: args.description,
-        },
-      })
-      return newLink
-    },
-  },
-
-  Link: {
-    id: (parent) => parent.id,
-    url: (parent) => parent.url,
-    description: (parent) => parent.description,
-  },
+  Query,
+  Mutation,
+  Link,
+  User,
 }
 
 const server = new ApolloServer({
   typeDefs: fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf8'),
   resolvers,
-  context: {
+  context: ({ req }) => ({
+    ...req,
     prisma,
-  },
+    userId: req && req.headers.authorization ? getUserId(req) : null,
+  }),
 })
 
 server.listen().then(({ url }) => console.log(`Server is running on ${url}`))
