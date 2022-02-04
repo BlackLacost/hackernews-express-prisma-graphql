@@ -13,6 +13,8 @@ async function post(parent, args, context) {
       postedBy: { connect: { id: userId } },
     },
   })
+  context.pubsub.publish('NEW_LINK', newLink)
+
   return newLink
 }
 
