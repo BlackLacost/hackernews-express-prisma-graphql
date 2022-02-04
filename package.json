@@ -1,0 +1,22 @@
+{
+  "name": "hackernews-express-prisma-graphql",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "nodemon src/index.js --ext \".\"",
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "Ilya Lisin <blacklacost@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "^3.9.1",
+    "apollo-server": "^2.25.3",
+    "graphql": "^15.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15",
+    "prisma": "^3.9.1"
+  }
+}
